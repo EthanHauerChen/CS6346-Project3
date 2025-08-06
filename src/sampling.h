@@ -35,7 +35,7 @@ struct FindSamples {
         
         Kernels::calculateY<<<blocks_per_grid, threads_per_block>>>(gpu_samples, w0, w1, w2, b, numSamples, stride);
         cudaDeviceSynchronize();
-        cudaMemcpy(cpu_samples, gpu_samples, numbytes_in_array);
+        cudaMemcpy(cpu_samples, gpu_samples, numbytes_in_array, cudaMemcpyDeviceToHost);
         cudaFree(gpu_samples);
 
         std::chrono::steady_clock::time_point end = std::chrono::steady_clock::now();
@@ -48,8 +48,8 @@ struct FindSamples {
             std::cout << "type an x value to check the polynomial\n";
             std::cin >> num;
             std::cout << "here is the corresponding y for the x = {" << num * numSamples / 20 << "}: ";
-            num = (int)((num + 10) * numSamples / 20);
-            std::cout << cpu_samples[num] << "\n";
+            int index = (int)((num + 10) * numSamples / 20);
+            std::cout << cpu_samples[index] << "\n";
         }
     }
 };
