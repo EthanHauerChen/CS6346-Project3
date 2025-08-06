@@ -43,13 +43,10 @@ struct FindSamples {
 		printf("            Time Elapsed: %d s\n", time_lapsed);
 
         //definitely should free the cpu_samples but i don't wanna write the extra logic to terminate the while loop
-        while(true) {
-            float num;
-            std::cout << "type an x value to check the polynomial\n";
-            std::cin >> num;
-            std::cout << "here is the corresponding y for the x = {" << num * numSamples / 20 << "}: ";
-            int index = (int)((num + 10) * numSamples / 20);
-            std::cout << cpu_samples[index] << "\n";
+        for (int i = 0; i < 100; i++) {
+            std::cout << "here is the corresponding y for the x = {" << 0.2 * i - 10 << "}: "; //hard coded scaling 100 samples to values from [-10, 10]
+            std::cout << cpu_samples[i] << "\n";
         }
+        free(cpu_samples);
     }
 };
