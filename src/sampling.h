@@ -47,6 +47,6 @@ struct FindSamples {
             std::cout << "here is the corresponding y for the x = {" << 0.2 * i - 10 << "}: "; //hard coded scaling 100 samples to values from [-10, 10]
             std::cout << cpu_samples[i] << "\n";
         }
-        free(cpu_samples);
+        return cpu_samples;
     }
 };
