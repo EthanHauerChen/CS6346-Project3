@@ -1,0 +1,40 @@
+--------------------------------------------------------------------------------------------------------------------
+  cuda: cuda/12.8
+--------------------------------------------------------------------------------------------------------------------
+    Description:
+      NVIDIA CUDA Toolkit for Linux
+
+    Properties:
+      built for GPU
+
+    You will need to load all module(s) on any one of the lines below before the "cuda/12.8" module is available to load.
+
+      gcc/13.2.0
+      gcc/15.1.0
+      nvidia/25.3
+      opencilk/2.1.0
+
+    Help:
+      The NVIDIA CUDA Toolkit provides a comprehensive development environment for C
+      and C++ developers building GPU-accelerated applications. The CUDA Toolkit
+      includes a compiler for NVIDIA GPUs, math libraries, and tools for debugging
+      and optimizing the performance of your applications. You will also find
+      programming guides, user manuals, API reference, and other documentation to
+      help you get started quickly accelerating your application with GPUs.
+
+      This module defines the environmental variables TACC_CUDA_BIN,
+      TACC_CUDA_LIB, TACC_CUDA_INC, TACC_CUDA_DOC, and TACC_CUDA_DIR
+      for the location of the cuda binaries, libaries, includes,
+      documentation, and main root directory respectively.
+
+      The location of the:
+      1.) binary files is added to PATH
+      2.) libraries is added to LD_LIBRARY_PATH
+      3.) header files is added to INCLUDE
+      4.) man pages is added to MANPATH
+
+      Version 12.8
+
+
+
+
