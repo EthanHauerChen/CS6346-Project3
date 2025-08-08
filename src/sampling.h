@@ -20,7 +20,6 @@ namespace Kernels {
 
 struct FindSamples {
     float* create_samples(float w0, float w1, float w2, float b, uint16_t numSamples) {
-        std::chrono::steady_clock::time_point begin = std::chrono::steady_clock::now();
 
         dim3 threads_per_block(32, 1, 1);
         int block_count = std::ceil((float)numSamples / (float)threads_per_block.x);
@@ -33,13 +32,15 @@ struct FindSamples {
         float* gpu_samples;
         cudaMalloc(&gpu_samples, numbytes_in_array);
         
+        std::chrono::steady_clock::time_point begin = std::chrono::steady_clock::now();
+
         Kernels::calculateY<<<blocks_per_grid, threads_per_block>>>(gpu_samples, w0, w1, w2, b, numSamples, stride);
         cudaDeviceSynchronize();
         cudaMemcpy(cpu_samples, gpu_samples, numbytes_in_array, cudaMemcpyDeviceToHost);
         cudaFree(gpu_samples);
 
         std::chrono::steady_clock::time_point end = std::chrono::steady_clock::now();
-		int time_lapsed = (int)std::chrono::duration_cast<std::chrono::seconds>(end - begin).count();
+		float time_lapsed = std::chrono::duration_cast<std::chrono::seconds>(end - begin).count();
 		printf("            Time Elapsed: %d s\n", time_lapsed);
 
         //definitely should free the cpu_samples but i don't wanna write the extra logic to terminate the while loop
