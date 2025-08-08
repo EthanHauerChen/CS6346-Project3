@@ -42,7 +42,7 @@ struct FindSamples {
 
         std::chrono::steady_clock::time_point end = std::chrono::steady_clock::now(); //stop clock
 		float time_lapsed = std::chrono::duration_cast<std::chrono::seconds>(end - begin).count();
-		printf("            Time Elapsed: %d s\n", time_lapsed);
+		printf("            Time Elapsed: %.2f s\n", time_lapsed);
 
         //definitely should free the cpu_samples but i don't wanna write the extra logic to terminate the while loop
         for (int i = 0; i < 100; i++) {
