@@ -19,7 +19,7 @@ namespace Kernels {
 }
 
 struct FindSamples {
-    float* create_samples(float w0, float w1, float w2, float b, uint16_t numSamples) {
+    float* create_samples(float w0, float w1, float w2, float b, uint32_t numSamples) {
 
         dim3 threads_per_block(32, 1, 1);
         int block_count = std::ceil((float)numSamples / (float)threads_per_block.x); //number of blocks = numSamples / threadsPerBlock (plus 1 if necessary)
