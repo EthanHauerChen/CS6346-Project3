@@ -72,7 +72,8 @@ struct FindInflections {
         cudaMalloc(&gpu_derivatives, numbytes_in_polynomial);
         
         Kernels::calc_second_derivative<<<blocks_per_grid, threads_per_block>>>(gpu_derivatives, w0, w1, numSamples, stride, job_size);
-        //cudaMemcpy(cpu_derivatives, gpu_derivatives, numbytes_in_polynomial, cudaMemcpyDeviceToHost);
+        cudaMemcpy(cpu_derivatives, gpu_derivatives, numbytes_in_polynomial, cudaMemcpyDeviceToHost);
+        cudaMemcpy(gpu_derivatives, cpu_derivatives, numbytes_in_polynomial, cudaMemcpyHostToDevice);
         Kernels::search_inflection_points<<<blocks_per_grid, threads_per_block>>>(gpu_derivatives, gpu_inflection, numSamples, stride, job_size);
         cudaMemcpy(cpu_inflection, gpu_inflection, numbytes_in_bool, cudaMemcpyDeviceToHost);
         cudaFree(gpu_derivatives);
