@@ -96,7 +96,7 @@ struct FindInflections {
         std::cout << "the polynomial at x = {.8333333} has inflection point: "; //hard coded scaling 100 samples to values from [-10, 10]
         printf("%s\n", cpu_inflection[458333333] ? "true" : "false");
         std::cout << "the polynomial at x = {.8333333} has inflection point: "; //hard coded scaling 100 samples to values from [-10, 10]
-        printf("%s\n", cpu_inflection[458333334] ? "true" : "false");
+        printf("%s\n", cpu_inflection[458333332] ? "true" : "false");
         return cpu_inflection;
     }
 };
