@@ -9,6 +9,20 @@
 #include <chrono>
 
 namespace Kernels {
+    __global__ void calc_first_derivative(float* derivatives, float w0, float w1, float w2, uint32_t numSamples, float stride, uint16_t job_size) {
+        unsigned long long global_index = blockIdx.x * 32 + threadIdx.x;
+        if (global_index >= numSamples) return; 
+
+        for (int i = 0; i < job_size; i++) {
+            int arr_index = global_index * job_size + i;
+            if (arr_index >= numSamples) return;
+            float xValue = stride * arr_index - 10; 
+            //calulate second derivate using power rule
+            derivatives[arr_index] = (3*w0 * xValue*xValue) + (2*w1 * xValue) + w2;
+        }
+        
+    }
+    
     __global__ void calc_second_derivative(float* derivatives, float w0, float w1, uint32_t numSamples, float stride, uint16_t job_size) {
         unsigned long long global_index = blockIdx.x * 32 + threadIdx.x;
         if (global_index >= numSamples) return; 
@@ -40,7 +54,7 @@ namespace Kernels {
             if (arr_index > numSamples-2) return;
             if (arr_index == 0) continue;
             
-            if (derivatives[arr_index-1] * derivatives[arr_index+1] < 0) //if result is negative, that means the 2nd derivative switches sign from either side
+            if (derivatives[arr_index-1] == derivatives[arr_index+1]) //if first derivative equal on either side, then inflection point
                 is_inflection_point[arr_index] = true;
             else
                 is_inflection_point[arr_index] = false;
@@ -71,7 +85,7 @@ struct FindInflections {
         float* gpu_derivatives;
         cudaMalloc(&gpu_derivatives, numbytes_in_polynomial);
         
-        Kernels::calc_second_derivative<<<blocks_per_grid, threads_per_block>>>(gpu_derivatives, w0, w1, numSamples, stride, job_size);
+        Kernels::calc_first_derivative<<<blocks_per_grid, threads_per_block>>>(gpu_derivatives, w0, w1, w2, numSamples, stride, job_size);
         cudaMemcpy(cpu_derivatives, gpu_derivatives, numbytes_in_polynomial, cudaMemcpyDeviceToHost);
         cudaMemcpy(gpu_derivatives, cpu_derivatives, numbytes_in_polynomial, cudaMemcpyHostToDevice);
         Kernels::search_inflection_points<<<blocks_per_grid, threads_per_block>>>(gpu_derivatives, gpu_inflection, numSamples, stride, job_size);
