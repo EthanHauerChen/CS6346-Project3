@@ -9,21 +9,37 @@
 #include <chrono>
 
 namespace Kernels {
-    __global__ void detectPositive(float* samples, bool* pos_or_neg, uint32_t numSamples, uint16_t job_size) {
+    __global__ void calc_second_derivative(float* derivatives, float w0, float w1, uint32_t numSamples, float stride, uint16_t job_size) {
         unsigned long long global_index = blockIdx.x * 32 + threadIdx.x;
         if (global_index >= numSamples) return; 
 
         for (int i = 0; i < job_size; i++) {
             int arr_index = global_index * job_size + i;
             if (arr_index >= numSamples) return;
-            pos_or_neg[arr_index] = samples[arr_index] > 0;
+            float xValue = stride * arr_index - 10; 
+            //calulate second derivate using power rule
+            derivatives[arr_index] = (6*w0 * xValue) + 2*w1;
         }
+        
+    }
+
+    __global__ void search_inflection_points(float* derivatives, bool* is_inflection_point, float numSamples, float stride) {
+        unsigned long long global_index = blockIdx.x * 32 + threadIdx.x;
+        if (global_index >= numSamples || global_index == 0 || global_index == numSamples-1) return; 
+
+        if (derivatives[global_index-1] * derivatives[global_index+1] < 0) { //if result is negative, that means the 2nd derivative switches sign from either side
+            is_inflection_point[global_index] = true;
+            return;
+        }
+        //else
+        is_inflection_point[global_index] = false;
+        return;
     }
 }
 
-struct FindPositives {
+struct FindInflections {
     /** w0 through b are coefficients of the polynomial. numSamples is how many x values to calculate from [-10, 10]. job_size is how many x values each thread is responsible for */
-    bool* detectPositive(float* samples, uint32_t numSamples, uint16_t job_size) {
+    bool* detect_inflection_points(float w0, float w1, uint32_t numSamples, uint16_t job_size) {
         std::chrono::steady_clock::time_point begin = std::chrono::steady_clock::now(); //start clock
 
         dim3 threads_per_block(32, 1, 1);
@@ -31,8 +47,8 @@ struct FindPositives {
         dim3 blocks_per_grid(block_count, 1, 1);
         float stride = (20.0 / (float)numSamples); //delta x of each sample, ie how far between each x
         size_t numbytes_in_polynomial = numSamples * sizeof(float);
-
-        size_t numbytes_in_bool = numSamples * sizeof(bool);
+        size_t numbytes_in_bool = numSamples * sizeof(float);
+        
         //allocate bool array containing true if the polynomial at that x value is positive, false otherwise
         bool* cpu_pos_or_neg = (bool*)malloc(numbytes_in_bool);
         //allocate GPU bool array containing true if the polynomial at that x value is positive, false otherwise
