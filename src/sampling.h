@@ -16,7 +16,6 @@ namespace Kernels {
         for (int i = 0; i < job_size; i++) {
             if (global_index + i >= numSamples) return;
             float xValue = stride * (i + global_index * job_size) - 10; 
-            printf("xValue = %f", xValue);
             y_values[global_index + i] = (w0 * xValue*xValue*xValue) + (w1 * xValue*xValue) + (w2 * xValue) + b; //not using pow function for the marginal performance improvement since my grade depends on execution time
         }
     }
@@ -53,7 +52,7 @@ struct FindSamples {
         //definitely should free the cpu_samples but i don't wanna write the extra logic to terminate the while loop
         for (int i = 0; i < numSamples; i+= (numSamples/100)) {
             std::cout << "here is the corresponding y for the x = {" << stride * i - 10 << "}: "; //hard coded scaling 100 samples to values from [-10, 10]
-            std::cout << cpu_samples[i] << "\n";
+            std::cout << cpu_samples[i] << " from cpu_samples[" << i << "]\n";
         }
         return cpu_samples;
     }
