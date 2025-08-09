@@ -48,7 +48,7 @@ struct FindSamples {
         cudaFree(gpu_samples); 
 
         std::chrono::steady_clock::time_point end = std::chrono::steady_clock::now(); //stop clock
-		float time_lapsed = std::chrono::duration_cast<std::chrono::seconds>(end - begin).count();
+		float time_lapsed = std::chrono::duration_cast<std::chrono::nanoseconds>(end - begin).count();
 		printf("            Time Elapsed: %.10f s\n", time_lapsed);
 
         //definitely should free the cpu_samples but i don't wanna write the extra logic to terminate the while loop
