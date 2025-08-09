@@ -12,7 +12,7 @@ struct polynomial {
 };
 
 int main() {
-    polynomial p{1, -1, 0.5, -.5};
+    polynomial p{.2, .5, -1, 0};
     uint32_t numSamples = 1000000000;
     uint16_t num_jobs = 1;
     FindSamples sampling_object{};
