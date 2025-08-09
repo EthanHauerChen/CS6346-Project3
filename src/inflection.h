@@ -40,10 +40,12 @@ namespace Kernels {
             if (arr_index > numSamples-2) return;
             if (arr_index == 0) continue;
             
-            if (derivatives[arr_index-1] * derivatives[arr_index+1] < 0) //if result is negative, that means the 2nd derivative switches sign from either side
-                is_inflection_point[global_index] = true;
-            else
-                is_inflection_point[global_index] = false;
+            // if (derivatives[arr_index-1] * derivatives[arr_index+1] < 0) //if result is negative, that means the 2nd derivative switches sign from either side
+            //     is_inflection_point[global_index] = true;
+            // else
+            //     is_inflection_point[global_index] = false;
+            if (derivatives[arr_index] < 0) is_inflection_point[arr_index] = false;
+            else is_inflection_point[arr_index] = true;
         }
         return;
     }
