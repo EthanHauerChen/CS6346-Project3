@@ -14,9 +14,10 @@ namespace Kernels {
         if (global_index >= numSamples) return; 
 
         for (int i = 0; i < job_size; i++) {
-            if (global_index + i >= numSamples) return;
-            float xValue = stride * (i + global_index * job_size) - 10; 
-            y_values[global_index + i] = (w0 * xValue*xValue*xValue) + (w1 * xValue*xValue) + (w2 * xValue) + b; //not using pow function for the marginal performance improvement since my grade depends on execution time
+            int arr_index = global_index * job_size + i;
+            if (arr_index >= numSamples) return;
+            float xValue = stride * arr_index - 10; 
+            y_values[arr_index] = (w0 * xValue*xValue*xValue) + (w1 * xValue*xValue) + (w2 * xValue) + b; //not using pow function for the marginal performance improvement since my grade depends on execution time
         }
     }
 }
