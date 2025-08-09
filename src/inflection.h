@@ -54,7 +54,7 @@ namespace Kernels {
             if (arr_index > numSamples-2) return;
             if (arr_index == 0) continue;
             
-            if (derivatives[arr_index] == 0)
+            if (derivatives[arr_index-1] == derivatives[arr_index+1])
                 is_inflection_point[arr_index] = true;
             else
                 is_inflection_point[arr_index] = false;
@@ -85,7 +85,7 @@ struct FindInflections {
         float* gpu_derivatives;
         cudaMalloc(&gpu_derivatives, numbytes_in_polynomial);
         
-        Kernels::calc_second_derivative<<<blocks_per_grid, threads_per_block>>>(gpu_derivatives, w0, w1, numSamples, stride, job_size);
+        Kernels::calc_first_derivative<<<blocks_per_grid, threads_per_block>>>(gpu_derivatives, w0, w1, w2, numSamples, stride, job_size);
         cudaMemcpy(cpu_derivatives, gpu_derivatives, numbytes_in_polynomial, cudaMemcpyDeviceToHost);
         cudaMemcpy(gpu_derivatives, cpu_derivatives, numbytes_in_polynomial, cudaMemcpyHostToDevice);
         Kernels::search_inflection_points<<<blocks_per_grid, threads_per_block>>>(gpu_derivatives, gpu_inflection, numSamples, stride, job_size);
