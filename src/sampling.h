@@ -53,7 +53,7 @@ struct FindSamples {
         //definitely should free the cpu_samples but i don't wanna write the extra logic to terminate the while loop
         for (int i = 0; i < numSamples; i+= (numSamples/100)) {
             std::cout << "here is the corresponding y for the x = {" << stride * i - 10 << "}: "; //hard coded scaling 100 samples to values from [-10, 10]
-            std::cout << cpu_samples[i] << " from cpu_samples[" << i << "]\n";
+            std::cout << cpu_samples[i] << "\n";
         }
         return cpu_samples;
     }
