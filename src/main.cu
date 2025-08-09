@@ -4,7 +4,7 @@
 
 int main() {
     FindSamples sampling_object{};
-    sampling_object.create_samples(1, 2, 3, 4, 1000000000);
+    sampling_object.create_samples(1, 2, 3, 4, 1000, 10);
 
     return 0;
 }
