@@ -23,16 +23,28 @@ namespace Kernels {
         
     }
 
-    __global__ void search_inflection_points(float* derivatives, bool* is_inflection_point, float numSamples, float stride) {
+    __global__ void search_inflection_points(float* derivatives, bool* is_inflection_point, float numSamples, float stride, uint16_t job_size) {
         unsigned long long global_index = blockIdx.x * 32 + threadIdx.x;
-        if (global_index >= numSamples || global_index == 0 || global_index == numSamples-1) return; 
+        if (global_index >= numSamples) return; 
 
-        if (derivatives[global_index-1] * derivatives[global_index+1] < 0) { //if result is negative, that means the 2nd derivative switches sign from either side
-            is_inflection_point[global_index] = true;
-            return;
+        // if (derivatives[global_index-1] * derivatives[global_index+1] < 0) { //if result is negative, that means the 2nd derivative switches sign from either side
+        //     is_inflection_point[global_index] = true;
+        //     return;
+        // }
+        // //else
+        // is_inflection_point[global_index] = false;
+        // return;
+
+        for (int i = 0; i < job_size; i++) {
+            int arr_index = global_index * job_size + i;
+            if (arr_index > numSamples-2) return;
+            if (arr_index == 0) continue;
+            
+            if (derivatives[arr_index-1] * derivatives[arr_index+1] < 0) //if result is negative, that means the 2nd derivative switches sign from either side
+                is_inflection_point[global_index] = true;
+            else
+                is_inflection_point[global_index] = false;
         }
-        //else
-        is_inflection_point[global_index] = false;
         return;
     }
 }
@@ -47,23 +59,25 @@ struct FindInflections {
         dim3 blocks_per_grid(block_count, 1, 1);
         float stride = (20.0 / (float)numSamples); //delta x of each sample, ie how far between each x
         size_t numbytes_in_polynomial = numSamples * sizeof(float);
-        size_t numbytes_in_bool = numSamples * sizeof(float);
+        size_t numbytes_in_bool = numSamples * sizeof(bool);
         
-        //allocate bool array containing true if the polynomial at that x value is positive, false otherwise
-        bool* cpu_pos_or_neg = (bool*)malloc(numbytes_in_bool);
-        //allocate GPU bool array containing true if the polynomial at that x value is positive, false otherwise
-        bool* gpu_pos_or_neg;
-        cudaMalloc(&gpu_pos_or_neg, (size_t)numbytes_in_bool);
-        //allocate GPU samples 
-        float* gpu_samples;
-        cudaMalloc(&gpu_samples, numbytes_in_polynomial);
-        cudaMemcpy(gpu_samples, samples, numbytes_in_polynomial, cudaMemcpyHostToDevice);
+        //allocate bool array containing true if inflection point
+        bool* cpu_inflection = (bool*)malloc(numbytes_in_bool);
+        bool* gpu_inflection;
+        cudaMalloc(&gpu_inflection, (size_t)numbytes_in_bool);
+
+        //allocate derivatives
+        float* cpu_derivatives = (float*)malloc(numbytes_in_polynomial);
+        float* gpu_derivatives;
+        cudaMalloc(&gpu_derivatives, numbytes_in_polynomial);
         
-        Kernels::detectPositive<<<blocks_per_grid, threads_per_block>>>(gpu_samples, gpu_pos_or_neg, numSamples, job_size);
-        cudaDeviceSynchronize();
-        cudaMemcpy(cpu_pos_or_neg, gpu_pos_or_neg, numbytes_in_bool, cudaMemcpyDeviceToHost); //copy gpu array to cpu array after everything is synchronized
-        cudaFree(gpu_samples); 
-        cudaFree(gpu_pos_or_neg);
+        Kernels::calc_second_derivative<<<blocks_per_grid, threads_per_block>>>(gpu_derivatives, w0, w1, numSamples, stride, job_size);
+        //cudaMemcpy(cpu_derivatives, gpu_derivatives, numbytes_in_polynomial, cudaMemcpyDeviceToHost);
+        Kernels::search_inflection_points<<<blocks_per_grid, threads_per_block>>>(gpu_derivatives, gpu_inflection, numSamples, stride, job_size);
+        cudaMemcpy(cpu_inflection, gpu_inflection, numbytes_in_bool, cudaMemcpyDeviceToHost);
+        cudaFree(gpu_derivatives);
+        cudaFree(gpu_inflection);
+        free(cpu_derivatives);
 
         std::chrono::steady_clock::time_point end = std::chrono::steady_clock::now(); //stop clock
 
@@ -72,9 +86,9 @@ struct FindInflections {
 
         //definitely should free the cpu_samples but i don't wanna write the extra logic to terminate the while loop
         for (int i = 0; i < numSamples; i+= (numSamples/100)) {
-            std::cout << "the polynomial at x = {" << stride * i - 10 << "} is positive: "; //hard coded scaling 100 samples to values from [-10, 10]
-            printf("%s\n", cpu_pos_or_neg[i] ? "true" : "false");
+            std::cout << "the polynomial at x = {" << stride * i - 10 << "} has inflection point: "; //hard coded scaling 100 samples to values from [-10, 10]
+            printf("%s\n", cpu_inflection[i] ? "true" : "false");
         }
-        return cpu_pos_or_neg;
+        return cpu_inflection;
     }
 };
