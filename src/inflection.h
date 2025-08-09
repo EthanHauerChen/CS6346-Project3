@@ -54,7 +54,7 @@ namespace Kernels {
             if (arr_index > numSamples-2) return;
             if (arr_index == 0) continue;
             
-            if ((derivatives[arr_index-1] > 0 && derivatives[arr_index+1] < 0) || (derivatives[arr_index-1] < 0 && derivatives[arr_index+1] > 0))
+            if ((derivatives[arr_index-1] > 0 && derivatives[arr_index+1] < 0) || (derivatives[arr_index-1] < 0 && derivatives[arr_index+1] > 0) || derivatives[arr_index] == 0)
                 is_inflection_point[arr_index] = true;
             else
                 is_inflection_point[arr_index] = false;
