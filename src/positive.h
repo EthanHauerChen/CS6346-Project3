@@ -43,7 +43,7 @@ struct FindPositives {
         cudaMalloc(&gpu_samples, numbytes_in_polynomial);
         cudaMemcpy(gpu_samples, samples, numbytes_in_polynomial, cudaMemcpyHostToDevice);
         
-        Kernels::detectPositive<<<blocks_per_grid, threads_per_block>>>(samples, gpu_pos_or_neg, numSamples, job_size);
+        Kernels::detectPositive<<<blocks_per_grid, threads_per_block>>>(gpu_samples, gpu_pos_or_neg, numSamples, job_size);
         cudaDeviceSynchronize();
         cudaMemcpy(cpu_pos_or_neg, gpu_pos_or_neg, numbytes_in_bool, cudaMemcpyDeviceToHost); //copy gpu array to cpu array after everything is synchronized
         cudaFree(gpu_samples); 
@@ -57,7 +57,7 @@ struct FindPositives {
         //definitely should free the cpu_samples but i don't wanna write the extra logic to terminate the while loop
         for (int i = 0; i < numSamples; i+= (numSamples/100)) {
             std::cout << "here is the corresponding y for the x = {" << stride * i - 10 << "}: "; //hard coded scaling 100 samples to values from [-10, 10]
-            printf("%s", cpu_pos_or_neg[i] ? "true" : "false");
+            printf("%s\n", cpu_pos_or_neg[i] ? "true" : "false");
         }
         return cpu_pos_or_neg;
     }
