@@ -4,14 +4,14 @@
 #include "positive.h"
 
 struct polynomial {
-        short w0,
-        short w1,
-        short w2,
-        short b
+        short w0;
+        short w1;
+        short w2;
+        short b;
 };
 
 int main() {
-    polynomial p{1, -1, 0.5, -.5, 1};
+    polynomial p{1, -1, 0.5, -.5};
     uint32_t numSamples = 1000000000;
     uint16_t num_jobs = 1;
     FindSamples sampling_object{};

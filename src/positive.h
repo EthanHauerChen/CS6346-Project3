@@ -37,7 +37,7 @@ struct FindPositives {
         bool* cpu_pos_or_neg = malloc(numbytes_in_bool);
         //allocate GPU bool array containing true if the polynomial at that x value is positive, false otherwise
         bool* gpu_pos_or_neg;
-        cudaMalloc(&pos_or_neg, (size_t)numbytes_in_bool);
+        cudaMalloc(&gpu_pos_or_neg, (size_t)numbytes_in_bool);
         //allocate GPU samples 
         float* gpu_samples;
         cudaMalloc(&gpu_samples, numbytes_in_polynomial);
@@ -58,6 +58,6 @@ struct FindPositives {
             std::cout << "here is the corresponding y for the x = {" << stride * i - 10 << "}: "; //hard coded scaling 100 samples to values from [-10, 10]
             std::cout << cpu_pos_or_neg[i] << "\n";
         }
-        return cpu_samples;
+        return cpu_pos_or_neg;
     }
 };
