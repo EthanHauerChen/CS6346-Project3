@@ -37,7 +37,7 @@ namespace Kernels {
         
     }
 
-    __global__ void search_inflection_points(float* derivatives, bool* is_inflection_point, float numSamples, float stride, uint16_t job_size) {
+    __global__ void search_inflection_points(float* first_derivatives, float* second_derivatives, bool* is_inflection_point, float numSamples, float stride, uint16_t job_size) {
         unsigned long long global_index = blockIdx.x * 32 + threadIdx.x;
         if (global_index >= numSamples) return; 
 
@@ -54,7 +54,7 @@ namespace Kernels {
             if (arr_index > numSamples-2) return;
             if (arr_index == 0) continue;
             
-            if (derivatives[arr_index-1] == derivatives[arr_index+1]) //if first derivative equal on either side, then inflection point
+            if (derivatives[arr_index-1] == derivatives[arr_index+1] && second_derivatives[arr_index] == 0) //if first derivative equal on either side, then inflection point
                 is_inflection_point[arr_index] = true;
             else
                 is_inflection_point[arr_index] = false;
@@ -81,14 +81,20 @@ struct FindInflections {
         cudaMalloc(&gpu_inflection, (size_t)numbytes_in_bool);
 
         //allocate derivatives
-        float* cpu_derivatives = (float*)malloc(numbytes_in_polynomial);
-        float* gpu_derivatives;
-        cudaMalloc(&gpu_derivatives, numbytes_in_polynomial);
+        float* cpu_1derivatives = (float*)malloc(numbytes_in_polynomial);
+        float* gpu_1derivatives;
+        cudaMalloc(&gpu_1derivatives, numbytes_in_polynomial);
+        float* cpu_2derivatives = (float*)malloc(numbytes_in_polynomial);
+        float* gpu_2derivatives;
+        cudaMalloc(&gpu_2derivatives, numbytes_in_polynomial);
         
-        Kernels::calc_first_derivative<<<blocks_per_grid, threads_per_block>>>(gpu_derivatives, w0, w1, w2, numSamples, stride, job_size);
-        cudaMemcpy(cpu_derivatives, gpu_derivatives, numbytes_in_polynomial, cudaMemcpyDeviceToHost);
-        cudaMemcpy(gpu_derivatives, cpu_derivatives, numbytes_in_polynomial, cudaMemcpyHostToDevice);
-        Kernels::search_inflection_points<<<blocks_per_grid, threads_per_block>>>(gpu_derivatives, gpu_inflection, numSamples, stride, job_size);
+        Kernels::calc_first_derivative<<<blocks_per_grid, threads_per_block>>>(gpu_1derivatives, w0, w1, w2, numSamples, stride, job_size);
+        cudaMemcpy(cpu_1derivatives, gpu_1derivatives, numbytes_in_polynomial, cudaMemcpyDeviceToHost);
+        cudaMemcpy(gpu_1derivatives, cpu_1derivatives, numbytes_in_polynomial, cudaMemcpyHostToDevice);
+        Kernels::calc_second_derivative<<<blocks_per_grid, threads_per_block>>>(gpu_2derivatives, w0, w1, w2, numSamples, stride, job_size);
+        cudaMemcpy(cpu_2derivatives, gpu_1derivatives, numbytes_in_polynomial, cudaMemcpyDeviceToHost);
+        cudaMemcpy(gpu_2derivatives, cpu_1derivatives, numbytes_in_polynomial, cudaMemcpyHostToDevice);
+        Kernels::search_inflection_points<<<blocks_per_grid, threads_per_block>>>(gpu_1derivatives, gpu_2derivatives, gpu_inflection, numSamples, stride, job_size);
         cudaMemcpy(cpu_inflection, gpu_inflection, numbytes_in_bool, cudaMemcpyDeviceToHost);
         cudaFree(gpu_derivatives);
         cudaFree(gpu_inflection);
