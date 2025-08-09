@@ -16,6 +16,7 @@ namespace Kernels {
         for (int i = 0; i < job_size; i++) {
             if (global_index + i >= numSamples) return;
             float xValue = stride * (i + global_index * job_size) - 10; 
+            printf("xValue = %f", xValue);
             y_values[global_index + i] = (w0 * xValue*xValue*xValue) + (w1 * xValue*xValue) + (w2 * xValue) + b; //not using pow function for the marginal performance improvement since my grade depends on execution time
         }
     }
@@ -28,8 +29,10 @@ struct FindSamples {
 
         dim3 threads_per_block(32, 1, 1);
         int block_count = std::ceil((float)numSamples / (float)job_size / (float)threads_per_block.x); //number of blocks = numSamples / threadsPerBlock (plus 1 if necessary)
+        cout << "block count: " << block_count << "\n";
         dim3 blocks_per_grid(block_count, 1, 1);
         float stride = (20.0 / (float)numSamples); //delta x of each sample, ie how far between each x
+        cout << "stride: " << stride << "\n"
         size_t numbytes_in_array = numSamples * sizeof(float);
 
         //allocate array where samples will be stored
