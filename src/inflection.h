@@ -54,7 +54,7 @@ namespace Kernels {
             if (arr_index > numSamples-2) return;
             if (arr_index == 0) continue;
             
-            if (derivatives[arr_index] == 0)
+            if ((derivatives[arr_index-1] > 0 && derivatives[arr_index+1] < 0) || (derivatives[arr_index-1] < 0 && derivatives[arr_index+1] > 0))
                 is_inflection_point[arr_index] = true;
             else
                 is_inflection_point[arr_index] = false;
@@ -109,7 +109,7 @@ struct FindInflections {
         std::cout << "the polynomial at x = {.8333333} has inflection point: "; //hard coded scaling 100 samples to values from [-10, 10]
         printf("%s\n", cpu_inflection[458333333] ? "true" : "false");
         std::cout << "the polynomial at x = {.8333333} has inflection point: "; //hard coded scaling 100 samples to values from [-10, 10]
-        printf("%s\n", cpu_inflection[458333334]) ? "true" : "false";
+        printf("%s\n", cpu_inflection[458333334]) ? "true" : "false");
         return cpu_inflection;
     }
 };
