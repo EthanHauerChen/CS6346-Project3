@@ -25,7 +25,7 @@ namespace Kernels {
 struct FindSamples {
     /** w0 through b are coefficients of the polynomial. numSamples is how many x values to calculate from [-10, 10]. job_size is how many x values each thread is responsible for */
     float* create_samples(float w0, float w1, float w2, float b, uint32_t numSamples, uint16_t job_size) {
-        
+        std::chrono::steady_clock::time_point begin = std::chrono::steady_clock::now(); //start clock
 
         dim3 threads_per_block(32, 1, 1);
         int block_count = std::ceil((float)numSamples / (float)job_size / (float)threads_per_block.x); //number of blocks = numSamples / threadsPerBlock (plus 1 if necessary)
@@ -41,7 +41,6 @@ struct FindSamples {
         float* gpu_samples;
         cudaMalloc(&gpu_samples, numbytes_in_array);
 
-        std::chrono::steady_clock::time_point begin = std::chrono::steady_clock::now(); //start clock
         Kernels::calculateY<<<blocks_per_grid, threads_per_block>>>(gpu_samples, w0, w1, w2, b, numSamples, stride, job_size);
         cudaDeviceSynchronize();
         cudaMemcpy(cpu_samples, gpu_samples, numbytes_in_array, cudaMemcpyDeviceToHost); //copy gpu array to cpu array after everything is synchronized
