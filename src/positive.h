@@ -23,7 +23,7 @@ namespace Kernels {
 
 struct FindPositives {
     /** w0 through b are coefficients of the polynomial. numSamples is how many x values to calculate from [-10, 10]. job_size is how many x values each thread is responsible for */
-    float* detectPositive(float* samples, uint32_t numSamples, uint16_t job_size) {
+    bool* detectPositive(float* samples, uint32_t numSamples, uint16_t job_size) {
         std::chrono::steady_clock::time_point begin = std::chrono::steady_clock::now(); //start clock
 
         dim3 threads_per_block(32, 1, 1);
@@ -34,7 +34,7 @@ struct FindPositives {
 
         size_t numbytes_in_bool = numSamples * sizeof(float);
         //allocate bool array containing true if the polynomial at that x value is positive, false otherwise
-        bool* cpu_pos_or_neg = malloc(numbytes_in_bool);
+        bool* cpu_pos_or_neg = (bool*)malloc(numbytes_in_bool);
         //allocate GPU bool array containing true if the polynomial at that x value is positive, false otherwise
         bool* gpu_pos_or_neg;
         cudaMalloc(&gpu_pos_or_neg, (size_t)numbytes_in_bool);
