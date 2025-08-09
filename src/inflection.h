@@ -91,11 +91,11 @@ struct FindInflections {
             printf("%s\n", cpu_inflection[i] ? "true" : "false");
         }
         std::cout << "the polynomial at x = {.8333333} has inflection point: "; //hard coded scaling 100 samples to values from [-10, 10]
-        printf("%f\n", cpu_derivatives[458333332]);
+        printf("%f\n", cpu_inflection[458333332]);
         std::cout << "the polynomial at x = {.8333333} has inflection point: "; //hard coded scaling 100 samples to values from [-10, 10]
-        printf("%f\n", cpu_derivatives[458333333]);
+        printf("%f\n", cpu_inflection[458333333]);
         std::cout << "the polynomial at x = {.8333333} has inflection point: "; //hard coded scaling 100 samples to values from [-10, 10]
-        printf("%f\n", cpu_derivatives[458333334]);
+        printf("%f\n", cpu_inflection[458333334]);
         return cpu_inflection;
     }
 };
