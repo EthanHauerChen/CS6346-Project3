@@ -65,7 +65,7 @@ namespace Kernels {
 
 struct FindInflections {
     /** w0 through b are coefficients of the polynomial. numSamples is how many x values to calculate from [-10, 10]. job_size is how many x values each thread is responsible for */
-    bool* detect_inflection_points(float w0, float w1, uint32_t numSamples, uint16_t job_size) {
+    bool* detect_inflection_points(float w0, float w1, float w2, uint32_t numSamples, uint16_t job_size) {
         std::chrono::steady_clock::time_point begin = std::chrono::steady_clock::now(); //start clock
 
         dim3 threads_per_block(32, 1, 1);
