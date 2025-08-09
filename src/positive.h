@@ -47,6 +47,7 @@ struct FindPositives {
         cudaDeviceSynchronize();
         cudaMemcpy(cpu_pos_or_neg, gpu_pos_or_neg, numbytes_in_bool, cudaMemcpyDeviceToHost); //copy gpu array to cpu array after everything is synchronized
         cudaFree(gpu_samples); 
+        cudaFree(gpu_pos_or_neg);
 
         std::chrono::steady_clock::time_point end = std::chrono::steady_clock::now(); //stop clock
 
@@ -56,7 +57,7 @@ struct FindPositives {
         //definitely should free the cpu_samples but i don't wanna write the extra logic to terminate the while loop
         for (int i = 0; i < numSamples; i+= (numSamples/100)) {
             std::cout << "here is the corresponding y for the x = {" << stride * i - 10 << "}: "; //hard coded scaling 100 samples to values from [-10, 10]
-            std::cout << cpu_pos_or_neg[i] << "\n";
+            printf("%s", cpu_pos_or_neg[i] ? "true" : "false");
         }
         return cpu_pos_or_neg;
     }
