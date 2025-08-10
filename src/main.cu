@@ -32,6 +32,8 @@ int main(int argc, char* argv[]) {
     int argi = 0;
     while (argi < argc) {
         double x_value = atof(argv[argi]);
+        uint32_t index = get_index(x_value, numSamples);
+        std::cout << "index: " << index << "\n";
         std::cout << "polynomial at x = " << x_value << ": (" << x_value << ", " << samples[get_index(x_value, numSamples)] << ")\n";
         argi++;
     }
