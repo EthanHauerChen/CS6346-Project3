@@ -60,7 +60,7 @@ struct FindPositives {
             printf("%s\n", cpu_pos_or_neg[i] ? "true" : "false");
         }
         for (int i = -50; i < 50; i++) {
-            std::cout << "the polynomial at x = {" << stride * (565586950 + i) - 10 << "} is positive: "; //hard coded scaling 100 samples to values from [-10, 10]
+            std::cout << "the polynomial at x = {" << (565586950 + i) << "} is positive: "; //hard coded scaling 100 samples to values from [-10, 10]
             printf("%s\n", cpu_pos_or_neg[565586950 + i] ? "true" : "false");
         }
         return cpu_pos_or_neg;
