@@ -12,7 +12,7 @@ struct polynomial {
 };
 
 /* return corresponding y value of the polynomial given an x*/
-uint32_t get_index(double* samples, double x_value, uint32_t numSamples) {
+uint32_t get_index(double x_value, uint32_t numSamples) {
     uint32_t index = (x_value + 10) / (20 / numSamples);
     return index;
 }
@@ -32,7 +32,7 @@ int main(int argc, char* argv[]) {
     int argi = 0;
     while (argi < argc) {
         double x_value = atof(argv[argi]);
-        std::cout << "polynomial at x = " << x_value << ": (" << x_value << ", " << samples[get_index(x_value)] << ")\n";
+        std::cout << "polynomial at x = " << x_value << ": (" << x_value << ", " << samples[get_index(x_value, numSamples)] << ")\n";
     }
     std::cout << "polynomial at (-10 <= x <= 10), in increments of 0.2: (x, y)\n";
     for (uint i = 0; i < numSamples; i += (numSamples / 100)) {
