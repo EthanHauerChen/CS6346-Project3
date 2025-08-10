@@ -31,7 +31,7 @@ struct FindSamples {
         int block_count = std::ceil((double)numSamples / (double)job_size / (double)threads_per_block.x); //number of blocks = numSamples / threadsPerBlock (plus 1 if necessary)
         std::cout << "block count: " << block_count << "\n";
         dim3 blocks_per_grid(block_count, 1, 1);
-        double stride = (20.0 / (double)(numSamples - 1)); //delta x of each sample, ie how far between each x
+        double stride = (20.0 / (double)(numSamples)); //delta x of each sample, ie how far between each x
         std::cout << "stride: " << stride << "\n";
         size_t numbytes_in_array = numSamples * sizeof(double);
 
