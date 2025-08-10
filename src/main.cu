@@ -19,7 +19,7 @@ int main() {
     FindInflections inflection_object{};
     FindPositives positive_object{};
 
-    float* samples = sampling_object.create_samples(p.w0, p.w1, p.w2, p.b, numSamples, num_jobs);
+    double* samples = sampling_object.create_samples(p.w0, p.w1, p.w2, p.b, numSamples, num_jobs);
     inflection_object.detect_inflection_points(p.w0, p.w1, p.w2, numSamples, num_jobs);
     positive_object.detectPositive(samples, numSamples, num_jobs);
 
