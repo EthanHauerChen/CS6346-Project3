@@ -23,7 +23,8 @@ namespace Kernels {
 
 struct FindPositives {
     /** w0 through b are coefficients of the polynomial. numSamples is how many x values to calculate from [-10, 10]. job_size is how many x values each thread is responsible for */
-    bool* detectPositive(double* samples, uint32_t numSamples, uint16_t job_size) {
+    uint32_t detectPositive(double* samples, uint32_t numSamples, uint16_t job_size) {
+        uint32_t num_positive = 0;
         std::chrono::steady_clock::time_point begin = std::chrono::steady_clock::now(); //start clock
 
         dim3 threads_per_block(32, 1, 1);
@@ -59,10 +60,9 @@ struct FindPositives {
             std::cout << "the polynomial at x = {" << stride * i - 10 << "} is positive: "; //hard coded scaling 100 samples to values from [-10, 10]
             printf("%s\n", cpu_pos_or_neg[i] ? "true" : "false");
         }
-        for (int i = -50; i < 50; i++) {
-            std::cout << "the polynomial at x = {" << (565586950 + i) << "} is positive: "; //hard coded scaling 100 samples to values from [-10, 10]
-            printf("%s\n", cpu_pos_or_neg[565586950 + i] ? "true" : "false");
-        }
-        return cpu_pos_or_neg;
+
+        for (uint32_t i = 0; i < numSamples; i++) 
+            if (cpu_pos_or_neg[i]) num_positive++;
+        return num_positive;
     }
 };
