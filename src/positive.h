@@ -9,7 +9,7 @@
 #include <chrono>
 
 namespace Kernels {
-    __global__ void detectPositive(float* samples, bool* pos_or_neg, uint32_t numSamples, uint16_t job_size) {
+    __global__ void detectPositive(double* samples, bool* pos_or_neg, uint32_t numSamples, uint16_t job_size) {
         unsigned long long global_index = blockIdx.x * 32 + threadIdx.x;
         if (global_index >= numSamples) return; 
 
@@ -23,14 +23,14 @@ namespace Kernels {
 
 struct FindPositives {
     /** w0 through b are coefficients of the polynomial. numSamples is how many x values to calculate from [-10, 10]. job_size is how many x values each thread is responsible for */
-    bool* detectPositive(float* samples, uint32_t numSamples, uint16_t job_size) {
+    bool* detectPositive(double* samples, uint32_t numSamples, uint16_t job_size) {
         std::chrono::steady_clock::time_point begin = std::chrono::steady_clock::now(); //start clock
 
         dim3 threads_per_block(32, 1, 1);
-        int block_count = std::ceil((float)numSamples / (float)job_size / (float)threads_per_block.x); //number of blocks = numSamples / threadsPerBlock (plus 1 if necessary)
+        int block_count = std::ceil((double)numSamples / (double)job_size / (double)threads_per_block.x); //number of blocks = numSamples / threadsPerBlock (plus 1 if necessary)
         dim3 blocks_per_grid(block_count, 1, 1);
-        float stride = (20.0 / (float)numSamples); //delta x of each sample, ie how far between each x
-        size_t numbytes_in_polynomial = numSamples * sizeof(float);
+        double stride = (20.0 / (double)numSamples); //delta x of each sample, ie how far between each x
+        size_t numbytes_in_polynomial = numSamples * sizeof(double);
 
         size_t numbytes_in_bool = numSamples * sizeof(bool);
         //allocate bool array containing true if the polynomial at that x value is positive, false otherwise
@@ -39,7 +39,7 @@ struct FindPositives {
         bool* gpu_pos_or_neg;
         cudaMalloc(&gpu_pos_or_neg, (size_t)numbytes_in_bool);
         //allocate GPU samples 
-        float* gpu_samples;
+        double* gpu_samples;
         cudaMalloc(&gpu_samples, numbytes_in_polynomial);
         cudaMemcpy(gpu_samples, samples, numbytes_in_polynomial, cudaMemcpyHostToDevice);
         
@@ -51,7 +51,7 @@ struct FindPositives {
 
         std::chrono::steady_clock::time_point end = std::chrono::steady_clock::now(); //stop clock
 
-		float time_lapsed = std::chrono::duration_cast<std::chrono::nanoseconds>(end - begin).count();
+		double time_lapsed = std::chrono::duration_cast<std::chrono::nanoseconds>(end - begin).count();
 		printf("            Time Elapsed: %.2f s\n", time_lapsed * pow(10, -9));
 
         //definitely should free the cpu_samples but i don't wanna write the extra logic to terminate the while loop
