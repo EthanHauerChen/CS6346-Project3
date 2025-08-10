@@ -12,12 +12,12 @@ struct polynomial {
 };
 
 /* return corresponding y value of the polynomial given an x*/
-double get_y(double* samples, double x_value, uint32_t numSamples) {
+uint32_t get_index(double* samples, double x_value, uint32_t numSamples) {
     uint32_t index = (x_value + 10) / (20 / numSamples);
-    return samples[index];
+    return index;
 }
 
-int main() {
+int main(int argc, char* argv[]) {
     polynomial p{.2, .5, -1, 0};
     uint32_t numSamples = 1000000000;
     uint16_t num_jobs = 1;
@@ -29,12 +29,17 @@ int main() {
     bool* inflection_points = inflection_object.detect_inflection_points(p.w0, p.w1, p.w2, numSamples, num_jobs);
     uint32_t num_positive = positive_object.detectPositive(samples, numSamples, num_jobs);
 
-    double x;
-    std::cout << "Enter a value between -10 and 10: ";
-    while (!(std::cin >> x)) {
-        std::cout << "Polynomial at x = " << x << ": " << get_y(samples, x, numSamples) << "\n";
-        std::cout << "Enter a value between -10 and 10: ";
+    int argi = 0;
+    while (argi < argc) {
+        double x_value = atof(argv[argi]);
+        std::cout << "polynomial at x = " << x_value << ": (" << x_value << ", " << samples[get_index(x_value)] << ")\n";
     }
+    std::cout << "polynomial at (-10 <= x <= 10), in increments of 0.2: (x, y)\n";
+    for (uint i = 0; i < numSamples; i += (numSamples / 100)) {
+        std::cout << "(" << (20.0 / numSamples) * i - 10 << ", " << samples[i] << ")\n";
+    }
+
+
 
     return 0;
 }
