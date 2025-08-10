@@ -55,6 +55,19 @@ struct FindSamples {
             std::cout << "here is the corresponding y for the x = {" << stride * i - 10 << "}: "; //hard coded scaling 100 samples to values from [-10, 10]
             std::cout << cpu_samples[i] << "\n";
         }
+        std::cout << "here is the corresponding y for the x = {some number close to y=0}: "; //hard coded scaling 100 samples to values from [-10, 10]
+        std::cout << cpu_samples[565586995] << "\n";
+        std::cout << "here is the corresponding y for the x = {some number close to y=0}: "; //hard coded scaling 100 samples to values from [-10, 10]
+        std::cout << cpu_samples[565586996] << "\n";
+        std::cout << "here is the corresponding y for the x = {some number close to y=0}: "; //hard coded scaling 100 samples to values from [-10, 10]
+        std::cout << cpu_samples[565586997] << "\n";
+        std::cout << "here is the corresponding y for the x = {some number close to y=0}: "; //hard coded scaling 100 samples to values from [-10, 10]
+        std::cout << cpu_samples[565586998] << "\n";
+        std::cout << "here is the corresponding y for the x = {some number close to y=0}: "; //hard coded scaling 100 samples to values from [-10, 10]
+        std::cout << cpu_samples[565586999] << "\n";
+        std::cout << "here is the corresponding y for the x = {some number close to y=0}: "; //hard coded scaling 100 samples to values from [-10, 10]
+        std::cout << cpu_samples[56558700] << "\n";
+        
         return cpu_samples;
     }
 };
