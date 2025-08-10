@@ -33,6 +33,7 @@ int main(int argc, char* argv[]) {
     while (argi < argc) {
         double x_value = atof(argv[argi]);
         std::cout << "polynomial at x = " << x_value << ": (" << x_value << ", " << samples[get_index(x_value, numSamples)] << ")\n";
+        argi++;
     }
     std::cout << "polynomial at (-10 <= x <= 10), in increments of 0.2: (x, y)\n";
     for (uint i = 0; i < numSamples; i += (numSamples / 100)) {
