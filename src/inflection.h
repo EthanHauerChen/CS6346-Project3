@@ -17,7 +17,7 @@ namespace Kernels {
             int arr_index = global_index * job_size + i;
             if (arr_index >= numSamples) return;
             double xValue = stride * arr_index - 10; 
-            //calulate second derivate using power rule
+            //calulate first derivate using power rule
             derivatives[arr_index] = (3*w0 * xValue*xValue) + (2*w1 * xValue) + w2;
         }
         
@@ -54,7 +54,7 @@ namespace Kernels {
             if (arr_index > numSamples-2) return;
             if (arr_index == 0) continue;
             
-            if ((derivatives[arr_index-1] * 1000000000 > 0 && derivatives[arr_index+1] * 1000000000 < 0) || (derivatives[arr_index-1] * 1000000000 < 0 && derivatives[arr_index+1] * 1000000000 > 0))
+            if ((derivatives[arr_index-1] > derivates[arr_index] && derivatives[arr_index+1] > derivatives[arr_index]) || (derivatives[arr_index-1] < derivatives[arr_index] && derivatives[arr_index+1] < derivatives[arr_index]))
                 is_inflection_point[arr_index] = true;
             else
                 is_inflection_point[arr_index] = false;
