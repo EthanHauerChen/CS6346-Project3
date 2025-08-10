@@ -59,6 +59,18 @@ struct FindPositives {
             std::cout << "the polynomial at x = {" << stride * i - 10 << "} is positive: "; //hard coded scaling 100 samples to values from [-10, 10]
             printf("%s\n", cpu_pos_or_neg[i] ? "true" : "false");
         }
+        std::cout << "here is the corresponding y for the x = {some number close to y=0}: "; //hard coded scaling 100 samples to values from [-10, 10]
+        std::cout << cpu_pos_or_neg[565586995] << "\n";
+        std::cout << "here is the corresponding y for the x = {some number close to y=0}: "; //hard coded scaling 100 samples to values from [-10, 10]
+        std::cout << cpu_pos_or_neg[565586996] << "\n";
+        std::cout << "here is the corresponding y for the x = {some number close to y=0}: "; //hard coded scaling 100 samples to values from [-10, 10]
+        std::cout << cpu_pos_or_neg[565586997] << "\n";
+        std::cout << "here is the corresponding y for the x = {some number close to y=0}: "; //hard coded scaling 100 samples to values from [-10, 10]
+        std::cout << cpu_pos_or_neg[565586998] << "\n";
+        std::cout << "here is the corresponding y for the x = {some number close to y=0}: "; //hard coded scaling 100 samples to values from [-10, 10]
+        std::cout << cpu_pos_or_neg[565586999] << "\n";
+        std::cout << "here is the corresponding y for the x = {some number close to y=0}: "; //hard coded scaling 100 samples to values from [-10, 10]
+        std::cout << cpu_pos_or_neg[56558700] << "\n";
         return cpu_pos_or_neg;
     }
 };
