@@ -67,17 +67,19 @@ int main(int argc, char* argv[]) {
         std::cout << "polynomial at x = " << x_value << ": (" << x_value << ", " << samples[get_index(x_value, numSamples)] << ")\n";
         argi++;
     }
-    std::cout << "polynomial at (-10 <= x <= 10), in increments of 0.2 (unless there's less than 100 samples): (x, y)\n";
+    std::cout << "\n\npolynomial at (-10 <= x <= 10), in increments of 0.2 (unless there's less than 100 samples): (x, y)\n";
     uint32_t increment = numSamples / 100;
     if (increment < 1) increment = 1;
     for (uint32_t i = 0; i < numSamples; i += increment) {
         std::cout << "(" << (20.0 / (numSamples-1)) * i - 10 << ", " << samples[i] << ")\n";
     }
 
+    std::cout << "\n\ninflection points: \n";
     for (uint32_t i = 0; i < numSamples; i++) 
         if (inflection_points[i]) std::cout << "inflection point at (" << get_x(i, numSamples) << ", " << samples[i] << ")\n";
 
-    std::cout << num_positive << " positive samples\n";
+    std::cout << "\n\n";
+    std::cout << num_positive << " positive samples\n\n";
 
     render_graph(samples, numSamples);
 

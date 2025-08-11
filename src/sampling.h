@@ -25,15 +25,12 @@ namespace Kernels {
 struct FindSamples {
     /** w0 through b are coefficients of the polynomial. numSamples is how many x values to calculate from [-10, 10]. job_size is how many x values each thread is responsible for */
     double* create_samples(double w0, double w1, double w2, double b, uint32_t numSamples, uint16_t job_size) {
-        std::cout << "hi";
         std::chrono::steady_clock::time_point begin = std::chrono::steady_clock::now(); //start clock
 
         dim3 threads_per_block(32, 1, 1);
         int block_count = std::ceil((double)numSamples / (double)job_size / (double)threads_per_block.x); //number of blocks = numSamples / threadsPerBlock (plus 1 if necessary)
-        std::cout << "block count: " << block_count << "\n";
         dim3 blocks_per_grid(block_count, 1, 1);
         double stride = (20.0 / (double)(numSamples - 1)); //delta x of each sample, ie how far between each x
-        std::cout << "stride: " << stride << "\n";
         size_t numbytes_in_array = numSamples * sizeof(double);
 
         //allocate array where samples will be stored

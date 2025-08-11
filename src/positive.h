@@ -24,7 +24,6 @@ namespace Kernels {
 struct FindPositives {
     /** w0 through b are coefficients of the polynomial. numSamples is how many x values to calculate from [-10, 10]. job_size is how many x values each thread is responsible for */
     uint32_t detectPositive(double* samples, uint32_t numSamples, uint16_t job_size) {
-        std::cout << "start positive \n";
         uint32_t num_positive = 0;
         std::chrono::steady_clock::time_point begin = std::chrono::steady_clock::now(); //start clock
 
