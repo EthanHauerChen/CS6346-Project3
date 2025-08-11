@@ -12,12 +12,12 @@ struct polynomial {
 };
 
 /* return corresponding y value of the polynomial given an x*/
-double get_y(double* samples, double x_value, uint32_t numSamples) {
-    uint32_t index = (x_value + 10) / (20 / numSamples);
-    return samples[index];
+double get_index(double x_value, uint32_t numSamples) {
+    uint32_t index = (x_value + 10) / (20.0 / numSamples);
+    return index;
 }
 
-int main() {
+int main(int argc, char* argv[]) {
     polynomial p{.2, .5, -1, 0};
     uint32_t numSamples = 10000;
     uint16_t num_jobs = 1;
