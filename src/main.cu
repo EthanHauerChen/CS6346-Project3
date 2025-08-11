@@ -29,5 +29,20 @@ int main() {
     bool* inflection_points = inflection_object.detect_inflection_points(p.w0, p.w1, p.w2, numSamples, num_jobs);
     uint32_t num_positive = positive_object.detectPositive(samples, numSamples, num_jobs);
 
+    int argi = 0;
+    while (argi < argc) {
+        double x_value = atof(argv[argi]);
+        uint32_t index = get_index(x_value, numSamples);
+        std::cout << "index: " << index << "\n";
+        std::cout << "polynomial at x = " << x_value << ": (" << x_value << ", " << samples[get_index(x_value, numSamples)] << ")\n";
+        argi++;
+    }
+    std::cout << "polynomial at (-10 <= x <= 10), in increments of 0.2: (x, y)\n";
+    for (uint i = 0; i < numSamples; i += (numSamples / 100)) {
+        std::cout << "(" << (20.0 / numSamples) * i - 10 << ", " << samples[i] << ")\n";
+    }
+
+
+
     return 0;
 }
