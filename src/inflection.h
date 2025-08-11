@@ -92,9 +92,9 @@ struct FindInflections {
         Kernels::calc_first_derivative<<<blocks_per_grid, threads_per_block>>>(gpu_derivatives, w0, w1, w2, numSamples, stride, job_size);
         cudaMemcpy(cpu_derivatives, gpu_derivatives, numbytes_in_polynomial, cudaMemcpyDeviceToHost);
         cudaMemcpy(gpu_derivatives, cpu_derivatives, numbytes_in_polynomial, cudaMemcpyHostToDevice);
-        for (uint32_t i = 0; i < numSamples; i++) {
-            if (abs(cpu_derivatives[i]) < 1000000/numSamples) std::cout << "first derivative is 0 at (" << stride * i - 10 << ", " << samples[i] << ")\n";
-        }
+        // for (uint32_t i = 0; i < numSamples; i++) {
+        //     if (abs(cpu_derivatives[i]) < .00001) std::cout << "first derivative is 0 at (" << stride * i - 10 << ", " << samples[i] << ")\n";
+        // }
         Kernels::search_inflection_points<<<blocks_per_grid, threads_per_block>>>(gpu_derivatives, gpu_inflection, numSamples, stride, job_size);
         cudaMemcpy(cpu_inflection, gpu_inflection, numbytes_in_bool, cudaMemcpyDeviceToHost);
         cudaFree(gpu_derivatives);
