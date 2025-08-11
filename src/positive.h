@@ -64,8 +64,8 @@ struct FindPositives {
         //     printf("%s\n", cpu_pos_or_neg[i] ? "true" : "false");
         // }
 
-        // for (uint32_t i = 0; i < numSamples; i++) 
-        //     if (cpu_pos_or_neg[i]) num_positive++;
+        for (uint32_t i = 0; i < numSamples; i++) 
+            if (cpu_pos_or_neg[i]) num_positive++;
         return num_positive;
     }
 };
