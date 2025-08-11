@@ -40,7 +40,7 @@ int main(int argc, char* argv[]) {
     std::cout << "polynomial at (-10 <= x <= 10), in increments of 0.2: (x, y)\n";
     uint32_t increment = numSamples / 100;
     if (increment < 1) increment = 1;
-    for (uint32_t i = 0; i <= numSamples; i += (numSamples / 100)) {
+    for (uint32_t i = 0; i <= numSamples; i += increment) {
         std::cout << "(" << (20.0 / numSamples) * i - 10 << ", " << samples[i] << ")\n";
     }
 
