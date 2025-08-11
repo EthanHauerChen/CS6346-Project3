@@ -25,7 +25,7 @@ double get_x(uint32_t index, uint32_t numSamples) {
 }
 
 void render_graph(double* samples, uint32_t numSamples) {
-    uint32_t scaled_x = numSamples / 20;
+    uint32_t scaled_x = (numSamples - 1) / 20;
     if (scaled_x == 0) scaled_x = 1;
 
     char graph [11][21];
