@@ -25,6 +25,7 @@ namespace Kernels {
 struct FindSamples {
     /** w0 through b are coefficients of the polynomial. numSamples is how many x values to calculate from [-10, 10]. job_size is how many x values each thread is responsible for */
     double* create_samples(double w0, double w1, double w2, double b, uint32_t numSamples, uint16_t job_size) {
+        std::cout << "hi";
         std::chrono::steady_clock::time_point begin = std::chrono::steady_clock::now(); //start clock
 
         dim3 threads_per_block(32, 1, 1);
