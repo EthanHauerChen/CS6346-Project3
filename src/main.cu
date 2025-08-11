@@ -50,7 +50,7 @@ void render_graph(double* samples, uint32_t numSamples) {
 
 int main(int argc, char* argv[]) {
     polynomial p{.2, .5, -1, 0};
-    uint32_t numSamples = 5;
+    uint32_t numSamples = 1000;
     uint16_t num_jobs = 1;
     FindSamples sampling_object{};
     FindInflections inflection_object{};
