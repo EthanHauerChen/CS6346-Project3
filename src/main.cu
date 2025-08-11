@@ -50,7 +50,7 @@ int main(int argc, char* argv[]) {
     }
 
     for (uint32_t i = 0; i < numSamples; i++) 
-        if (inflection_points[i]) std::count << "inflection point at (" << get_x(i) << ", " << samples[i] << ")\n";
+        if (inflection_points[i]) std::cout << "inflection point at (" << get_x(i, numSamples) << ", " << samples[i] << ")\n";
 
     return 0;
 }
