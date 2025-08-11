@@ -18,6 +18,7 @@ uint32_t get_index(double x_value, uint32_t numSamples) {
 }
 
 int main(int argc, char* argv[]) {
+    std::cout << "hi";
     polynomial p{.2, .5, -1, 0};
     uint32_t numSamples = 10000;
     uint16_t num_jobs = 1;
