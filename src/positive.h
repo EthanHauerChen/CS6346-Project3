@@ -30,7 +30,7 @@ struct FindPositives {
         dim3 threads_per_block(32, 1, 1);
         int block_count = std::ceil((double)numSamples / (double)job_size / (double)threads_per_block.x); //number of blocks = numSamples / threadsPerBlock (plus 1 if necessary)
         dim3 blocks_per_grid(block_count, 1, 1);
-        double stride = (20.0 / (double)(numSamples)); //delta x of each sample, ie how far between each x
+        double stride = (20.0 / (double)(numSamples-1)); //delta x of each sample, ie how far between each x
         size_t numbytes_in_polynomial = numSamples * sizeof(double);
 
         size_t numbytes_in_bool = numSamples * sizeof(bool);
