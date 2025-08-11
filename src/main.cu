@@ -29,12 +29,5 @@ int main() {
     bool* inflection_points = inflection_object.detect_inflection_points(p.w0, p.w1, p.w2, numSamples, num_jobs);
     uint32_t num_positive = positive_object.detectPositive(samples, numSamples, num_jobs);
 
-    double x;
-    std::cout << "Enter a value between -10 and 10: ";
-    while (!(std::cin >> x)) {
-        std::cout << "Polynomial at x = " << x << ": " << get_y(samples, x, numSamples) << "\n";
-        std::cout << "Enter a value between -10 and 10: ";
-    }
-
     return 0;
 }
