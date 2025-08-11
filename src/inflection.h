@@ -53,8 +53,8 @@ namespace Kernels {
             int arr_index = global_index * job_size + i;
             if (arr_index > numSamples-2) return;
             if (arr_index == 0) continue;
-            int before = arr_index - 100;
-            int after = arr_index + 100;
+            int before = arr_index - 5;
+            int after = arr_index + 5;
             if (before < 0) before = 0;
             if (after >= numSamples) after = numSamples - 1;
             
