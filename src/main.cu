@@ -29,6 +29,7 @@ int main(int argc, char* argv[]) {
     double* samples = sampling_object.create_samples(p.w0, p.w1, p.w2, p.b, numSamples, num_jobs);
     bool* inflection_points = inflection_object.detect_inflection_points(p.w0, p.w1, p.w2, numSamples, num_jobs);
     uint32_t num_positive = positive_object.detectPositive(samples, numSamples, num_jobs);
+    std::cout << "hi";
 
     int argi = 0;
     while (argi < argc) {
