@@ -11,10 +11,16 @@ struct polynomial {
         float b;
 };
 
-/* return corresponding y value of the polynomial given an x*/
+/* return corresponding index of the array given an x*/
 uint32_t get_index(double x_value, uint32_t numSamples) {
     uint32_t index = (x_value + 10) / (20.0 / (numSamples-1));
     return index;
+}
+
+/* return corresponding x value of the polynomial given an array index*/
+double get_x(uint32_t index, uint32_t numSamples) {
+    double x = (index * (20.0 / (numSamples-1))) - 10;
+    return x;
 }
 
 int main(int argc, char* argv[]) {
@@ -43,7 +49,8 @@ int main(int argc, char* argv[]) {
         std::cout << "(" << (20.0 / (numSamples-1)) * i - 10 << ", " << samples[i] << ")\n";
     }
 
-
+    for (uint32_t i = 0; i < numSamples; i++) 
+        if (inflection_points[i]) std::count << "inflection point at (" << get_x(i) << ", " << samples[i] << ")\n";
 
     return 0;
 }

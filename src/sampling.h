@@ -49,7 +49,7 @@ struct FindSamples {
 
         std::chrono::steady_clock::time_point end = std::chrono::steady_clock::now(); //stop clock
 		double time_lapsed = std::chrono::duration_cast<std::chrono::nanoseconds>(end - begin).count();
-		printf("            Time Elapsed: %.2f s\n", time_lapsed * pow(10, -9));
+		printf("            Polynomial Sampling Time Elapsed: %.2f s\n", time_lapsed * pow(10, -9));
 
         //definitely should free the cpu_samples but i don't wanna write the extra logic to terminate the while loop
         // uint32_t increment = numSamples / 100;
