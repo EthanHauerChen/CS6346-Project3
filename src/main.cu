@@ -13,7 +13,7 @@ struct polynomial {
 
 /* return corresponding y value of the polynomial given an x*/
 uint32_t get_index(double x_value, uint32_t numSamples) {
-    uint32_t index = (x_value + 10) / (20.0 / numSamples);
+    uint32_t index = (x_value + 10) / (20.0 / (numSamples-1));
     return index;
 }
 
@@ -40,8 +40,8 @@ int main(int argc, char* argv[]) {
     std::cout << "polynomial at (-10 <= x <= 10), in increments of 0.2: (x, y)\n";
     uint32_t increment = numSamples / 100;
     if (increment < 1) increment = 1;
-    for (uint32_t i = 0; i <= numSamples; i += increment) {
-        std::cout << "(" << (20.0 / numSamples) * i - 10 << ", " << samples[i] << ")\n";
+    for (uint32_t i = 0; i < numSamples; i += increment) {
+        std::cout << "(" << (20.0 / (numSamples-1)) * i - 10 << ", " << samples[i] << ")\n";
     }
 
 
