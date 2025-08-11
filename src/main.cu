@@ -1,4 +1,5 @@
 #include <iostream>
+#include <cmath>
 
 #include "sampling.h"
 #include "positive.h"
@@ -21,6 +22,21 @@ uint32_t get_index(double x_value, uint32_t numSamples) {
 double get_x(uint32_t index, uint32_t numSamples) {
     double x = (index * (20.0 / (numSamples-1))) - 10;
     return x;
+}
+
+void render_graph(double* samples, uint32_t numSamples) {
+    uint32_t scaled_x = numSamples / 20;
+    if (scaled_x == 0) scaled_x = 1;
+
+    char graph [11][21];
+    for (int r = 0; r < 11; r++) {
+        for (int c = 0; c < 21; c++) graph[r][c] = '.';
+    }
+    for (int c = 0; c < 21; c++) {
+        uint32_t arr_index = scaled_x * c;
+        if (samples[arr_index] > 5 || samples[arr_index] < -5) continue;
+        else graph[(uint32_t)std::round(samples[arr_index])][c] = '#';
+    }
 }
 
 int main(int argc, char* argv[]) {
@@ -52,7 +68,9 @@ int main(int argc, char* argv[]) {
     for (uint32_t i = 0; i < numSamples; i++) 
         if (inflection_points[i]) std::cout << "inflection point at (" << get_x(i, numSamples) << ", " << samples[i] << ")\n";
 
-    std::cout << num_positive << " number of positive samples\n";
+    std::cout << num_positive << " positive samples\n";
+
+    render_graph(samples, numSamples);
 
     return 0;
 }
