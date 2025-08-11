@@ -19,7 +19,7 @@ uint32_t get_index(double x_value, uint32_t numSamples) {
 
 int main(int argc, char* argv[]) {
     polynomial p{.2, .5, -1, 0};
-    uint32_t numSamples = 10000;
+    uint32_t numSamples = 5;
     uint16_t num_jobs = 1;
     FindSamples sampling_object{};
     FindInflections inflection_object{};
@@ -38,7 +38,7 @@ int main(int argc, char* argv[]) {
         argi++;
     }
     std::cout << "polynomial at (-10 <= x <= 10), in increments of 0.2: (x, y)\n";
-    for (uint i = 0; i < numSamples; i += (numSamples / 100)) {
+    for (uint i = 0; i <= numSamples; i += (numSamples / 100)) {
         std::cout << "(" << (20.0 / numSamples) * i - 10 << ", " << samples[i] << ")\n";
     }
 
