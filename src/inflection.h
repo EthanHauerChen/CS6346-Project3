@@ -53,8 +53,10 @@ namespace Kernels {
             int arr_index = global_index * job_size + i;
             if (arr_index > numSamples-2) return;
             if (arr_index == 0) continue;
+            int before = arr_index - numSamples / 100000;
+            int after = arr_index + numSamples / 100000;
             
-            if ((derivatives[arr_index-1] > derivatives[arr_index] && derivatives[arr_index+1] > derivatives[arr_index]) || (derivatives[arr_index-1] < derivatives[arr_index] && derivatives[arr_index+1] < derivatives[arr_index]))
+            if ((derivatives[before] > derivatives[arr_index] && derivatives[after] > derivatives[arr_index]) || (derivatives[before] < derivatives[arr_index] && derivatives[after] < derivatives[arr_index]))
                 is_inflection_point[arr_index] = true;
             else
                 is_inflection_point[arr_index] = false;
