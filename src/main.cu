@@ -72,6 +72,7 @@ int main(int argc, char* argv[]) {
     for (uint32_t i = 0; i < numSamples; i += increment) {
         std::cout << "(" << (20.0 / (numSamples-1)) * i - 10 << ", " << samples[i] << ")\n";
     }
+    std::cout << "(" << (20.0 / (numSamples-1)) * numSamples - 10 << ", " << samples[numSamples-1] << ")\n";
 
     std::cout << "\n\ninflection points: \n";
     for (uint32_t i = 0; i < numSamples; i++) 
