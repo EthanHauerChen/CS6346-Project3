@@ -12,7 +12,7 @@ struct polynomial {
 };
 
 /* return corresponding y value of the polynomial given an x*/
-double get_index(double x_value, uint32_t numSamples) {
+uint32_t get_index(double x_value, uint32_t numSamples) {
     uint32_t index = (x_value + 10) / (20.0 / numSamples);
     return index;
 }
