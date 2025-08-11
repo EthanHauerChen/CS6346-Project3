@@ -35,7 +35,10 @@ void render_graph(double* samples, uint32_t numSamples) {
     for (int c = 0; c < 21; c++) {
         uint32_t arr_index = scaled_x * c;
         if (samples[arr_index] > 5 || samples[arr_index] < -5) continue;
-        else graph[(uint32_t)std::round(samples[arr_index])][c] = '#';
+        else {
+            std::cout << "y=" << (uint32_t)std::round(samples[arr_index]) << "\n";
+            graph[(uint32_t)std::round(samples[arr_index])][c] = '#';
+        }
     }
 
     for (int r = 0; r < 11; r++) {
