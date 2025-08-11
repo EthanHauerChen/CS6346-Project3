@@ -37,6 +37,11 @@ void render_graph(double* samples, uint32_t numSamples) {
         if (samples[arr_index] > 5 || samples[arr_index] < -5) continue;
         else graph[(uint32_t)std::round(samples[arr_index])][c] = '#';
     }
+
+    for (int r = 0; r < 11; r++) {
+        for (int c = 0; c < 21; c++) std::cout << graph[r][c];
+        std::cout << '\n';
+    }
 }
 
 int main(int argc, char* argv[]) {
