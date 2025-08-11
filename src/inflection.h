@@ -69,7 +69,7 @@ namespace Kernels {
 
 struct FindInflections {
     /** w0 through b are coefficients of the polynomial. numSamples is how many x values to calculate from [-10, 10]. job_size is how many x values each thread is responsible for */
-    bool* detect_inflection_points(double w0, double w1, double w2, uint32_t numSamples, uint16_t job_size) {
+    bool* detect_inflection_points(double* samples, double w0, double w1, double w2, uint32_t numSamples, uint16_t job_size) {
         std::chrono::steady_clock::time_point begin = std::chrono::steady_clock::now(); //start clock
 
         dim3 threads_per_block(32, 1, 1);
@@ -92,6 +92,9 @@ struct FindInflections {
         Kernels::calc_first_derivative<<<blocks_per_grid, threads_per_block>>>(gpu_derivatives, w0, w1, w2, numSamples, stride, job_size);
         cudaMemcpy(cpu_derivatives, gpu_derivatives, numbytes_in_polynomial, cudaMemcpyDeviceToHost);
         cudaMemcpy(gpu_derivatives, cpu_derivatives, numbytes_in_polynomial, cudaMemcpyHostToDevice);
+        for (uint32_t i = 0; i < numSamples; i++) {
+            if (cpu_derivatives[i] == 0) std::cout << "first derivate is 0 at (" << stride * i - 10 << ", " << samples[i] << ")\n";
+        }
         Kernels::search_inflection_points<<<blocks_per_grid, threads_per_block>>>(gpu_derivatives, gpu_inflection, numSamples, stride, job_size);
         cudaMemcpy(cpu_inflection, gpu_inflection, numbytes_in_bool, cudaMemcpyDeviceToHost);
         cudaFree(gpu_derivatives);
