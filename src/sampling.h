@@ -55,6 +55,7 @@ struct FindSamples {
         uint32_t increment = numSamples / 100;
         if (increment == 0) increment = 1;
         for (int i = 0; i < numSamples; i+= (numSamples / 100)) {
+            std::cout << "i = " << i;
             std::cout << "here is the corresponding y for the x = {" << stride * i - 10 << "}: "; //hard coded scaling 100 samples to values from [-10, 10]
             std::cout << cpu_samples[i] << "\n";
         }
