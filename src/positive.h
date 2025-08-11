@@ -57,15 +57,15 @@ struct FindPositives {
 		printf("            Time Elapsed: %.2f s\n", time_lapsed * pow(10, -9));
 
         //definitely should free the cpu_samples but i don't wanna write the extra logic to terminate the while loop
-        uint32_t increment = numSamples / 100;
-        if (increment < 1) increment = 1;
-        for (int i = 0; i < numSamples; i+= increment) {
-            std::cout << "the polynomial at x = {" << stride * i - 10 << "} is positive: "; //hard coded scaling 100 samples to values from [-10, 10]
-            printf("%s\n", cpu_pos_or_neg[i] ? "true" : "false");
-        }
+        // uint32_t increment = numSamples / 100;
+        // if (increment < 1) increment = 1;
+        // for (int i = 0; i < numSamples; i+= increment) {
+        //     std::cout << "the polynomial at x = {" << stride * i - 10 << "} is positive: "; //hard coded scaling 100 samples to values from [-10, 10]
+        //     printf("%s\n", cpu_pos_or_neg[i] ? "true" : "false");
+        // }
 
-        for (uint32_t i = 0; i < numSamples; i++) 
-            if (cpu_pos_or_neg[i]) num_positive++;
+        // for (uint32_t i = 0; i < numSamples; i++) 
+        //     if (cpu_pos_or_neg[i]) num_positive++;
         return num_positive;
     }
 };

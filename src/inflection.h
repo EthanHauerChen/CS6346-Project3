@@ -101,12 +101,12 @@ struct FindInflections {
 		printf("            Time Elapsed: %.2f s\n", time_lapsed * pow(10, -9));
 
         //definitely should free the cpu_samples but i don't wanna write the extra logic to terminate the while loop
-        uint32_t increment = numSamples / 100;
-        if (increment < 1) increment = 1;
-        for (int i = 0; i < numSamples; i+= increment) {
-            std::cout << "the polynomial at x = {" << stride * i - 10 << "} has inflection point: "; //hard coded scaling 100 samples to values from [-10, 10]
-            printf("%s\n", cpu_inflection[i] ? "true" : "false");
-        }
+        // uint32_t increment = numSamples / 100;
+        // if (increment < 1) increment = 1;
+        // for (int i = 0; i < numSamples; i+= increment) {
+        //     std::cout << "the polynomial at x = {" << stride * i - 10 << "} has inflection point: "; //hard coded scaling 100 samples to values from [-10, 10]
+        //     printf("%s\n", cpu_inflection[i] ? "true" : "false");
+        // }
         return cpu_inflection;
     }
 };

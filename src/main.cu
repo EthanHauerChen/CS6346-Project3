@@ -37,7 +37,7 @@ int main(int argc, char* argv[]) {
         std::cout << "polynomial at x = " << x_value << ": (" << x_value << ", " << samples[get_index(x_value, numSamples)] << ")\n";
         argi++;
     }
-    std::cout << "polynomial at (-10 <= x <= 10), in increments of 0.2: (x, y)\n";
+    std::cout << "polynomial at (-10 <= x <= 10), in increments of 0.2 (unless there's less than 100 samples): (x, y)\n";
     uint32_t increment = numSamples / 100;
     if (increment < 1) increment = 1;
     for (uint32_t i = 0; i < numSamples; i += increment) {
