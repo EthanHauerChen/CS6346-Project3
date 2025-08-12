@@ -66,7 +66,7 @@ struct FindPositives {
         int* cpu_sums = (int*)malloc(numbytes_in_int);
         int* gpu_sums;
         cudaMalloc(&gpu_sums, numbytes_in_int);
-        Kernels::numPositive<<<((double)numSamples / 1000.0 / (double)threads_per_block.x), threads_per_block>>>(gpu_sums, gpu_pos_or_neg, numSamples, 1000);
+        Kernels::numPositive<<<std::ceil((double)numSamples / 1000.0 / (double)threads_per_block.x), threads_per_block>>>(gpu_sums, gpu_pos_or_neg, numSamples, 1000);
         cudaDeviceSynchronize();
         cudaMemcpy(cpu_sums, gpu_sums, numbytes_in_int, cudaMemcpyDeviceToHost);
         cudaFree(gpu_samples); 
