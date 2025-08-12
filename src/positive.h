@@ -74,7 +74,7 @@ struct FindPositives {
         cudaFree(gpu_sums);
         int iterations = numSamples / job_size;
         for (uint32_t i = 0; i < iterations; i++) {
-            num_positive += sums[i];
+            num_positive += cpu_sums[i];
         }
 
         std::chrono::steady_clock::time_point end = std::chrono::steady_clock::now(); //stop clock
