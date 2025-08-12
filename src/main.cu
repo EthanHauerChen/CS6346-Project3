@@ -79,26 +79,6 @@ int main(int argc, char* argv[]) {
         if (inflection_points[i]) std::cout << "inflection point at (" << get_x(i, numSamples) << ", " << samples[i] << ")\n";
 
     std::cout << "\n\nlocal maxima/minima: \n";
-    // dim3 threads_per_block(32, 1, 1);
-    // int block_count = std::ceil((double)numSamples / (double)job_size / (double)threads_per_block.x); //number of blocks = numSamples / threadsPerBlock (plus 1 if necessary)
-    // dim3 blocks_per_grid(block_count, 1, 1);
-    // double stride = (20.0 / (double)(numSamples - 1)); //delta x of each sample, ie how far between each x
-    // size_t numbytes_in_polynomial = numSamples * sizeof(double);
-    // size_t numbytes_in_bool = numSamples * sizeof(bool);
-    
-    // //allocate bool array containing true if inflection point
-    // bool* cpu_inflection = (bool*)malloc(numbytes_in_bool);
-    // bool* gpu_inflection;
-    // cudaMalloc(&gpu_inflection, (size_t)numbytes_in_bool);
-
-    // //allocate derivatives
-    // double* cpu_derivatives = (double*)malloc(numbytes_in_polynomial);
-    // double* gpu_derivatives;
-    // cudaMalloc(&gpu_derivatives, numbytes_in_polynomial);
-    
-    // Kernels::calc_first_derivative<<<blocks_per_grid, threads_per_block>>>(gpu_derivatives, w0, w1, w2, numSamples, stride, job_size);
-    // cudaMemcpy(cpu_derivatives, gpu_derivatives, numbytes_in_polynomial, cudaMemcpyDeviceToHost);
-    // cudaMemcpy(gpu_derivatives, cpu_derivatives, numbytes_in_polynomial, cudaMemcpyHostToDevice);
     for (uint32_t i = 1; i < numSamples-1; i++) {
         double leftSlope = samples[i-1] - samples[i];
         double rightSlope = samples[i+1] - samples[i];

@@ -19,6 +19,20 @@ namespace Kernels {
             pos_or_neg[arr_index] = samples[arr_index] > 0;
         }
     }
+
+    __global__ void numPositive(int* sums, bool* pos_or_neg, uint32_t numSamples, uint16_t job_size) {
+        unsigned long long global_index = blockIdx.x * 32 + threadIdx.x;
+        if (global_index >= numSamples) return; 
+
+        int arr_index;
+        int sum = 0;
+        for (int i = 0; i < job_size; i++) {
+            arr_index = global_index * job_size + i;
+            if (arr_index >= numSamples) return;
+            if (pos_or_neg[arr_index]) sum++;
+        }
+        sums[threadIdx.x] = sum;
+    }
 }
 
 struct FindPositives {
@@ -47,8 +61,21 @@ struct FindPositives {
         Kernels::detectPositive<<<blocks_per_grid, threads_per_block>>>(gpu_samples, gpu_pos_or_neg, numSamples, job_size);
         cudaDeviceSynchronize();
         cudaMemcpy(cpu_pos_or_neg, gpu_pos_or_neg, numbytes_in_bool, cudaMemcpyDeviceToHost); //copy gpu array to cpu array after everything is synchronized
+
+        size_t numbytes_in_int = (numSamples / job_size) * sizeof(int);
+        int* cpu_sums = (int*)malloc(numbytes_in_int);
+        int* gpu_sums;
+        cudaMalloc(&gpu_sums, numbytes_in_int);
+        Kernels::numPositive<<<((double)numSamples / 1000.0 / (double)threads_per_block.x), threads_per_block>>>(gpu_sums, gpu_pos_or_neg, numSamples, 1000);
+        cudaDeviceSynchronize();
+        cudaMemcpy(gpu_sums, cpu_sums, numbytes_in_int, cudaMemcpyDeviceToHost);
         cudaFree(gpu_samples); 
         cudaFree(gpu_pos_or_neg);
+        cudaFree(gpu_sums);
+        int iterations = numSamples / job_size;
+        for (uint32_t i = 0; i < iterations; i++) {
+            num_positive += sums[i];
+        }
 
         std::chrono::steady_clock::time_point end = std::chrono::steady_clock::now(); //stop clock
 
@@ -63,8 +90,8 @@ struct FindPositives {
         //     printf("%s\n", cpu_pos_or_neg[i] ? "true" : "false");
         // }
 
-        for (uint32_t i = 0; i < numSamples; i++) 
-            if (cpu_pos_or_neg[i]) num_positive++;
+        // for (uint32_t i = 0; i < numSamples; i++) 
+        //     if (cpu_pos_or_neg[i]) num_positive++;
         return num_positive;
     }
 };
